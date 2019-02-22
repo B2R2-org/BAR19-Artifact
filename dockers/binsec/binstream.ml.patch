@@ -1,0 +1,16 @@
+--- src/base/binstream.ml       2018-12-12 10:04:40.161195068 +0000
++++ src/base/binstream.ml.patch 2018-12-12 10:04:10.477531065 +0000
+@@ -82,6 +82,13 @@
+ let prepend_char c = prepend_int (Char.code c)
+ let append_char c = append_int (Char.code c)
+
++let rec pop_front n h =
++  if n = 0 then h
++  else
++    match Sequence.pop_back h with
++    | Some (h) -> pop_front (n - 1) h
++    | None -> h
++
+ let of_list l =
+   List.fold_left (fun seq e -> prepend_int e seq) empty l
+

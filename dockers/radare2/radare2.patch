@@ -1,0 +1,20 @@
+--- ./binr/rasm2/rasm2.c  2018-12-12 13:57:31.617191197 +0000
++++ ./binr/rasm2/rasm2.c.patched  2018-12-12 13:57:24.801298316 +0000
+@@ -40,7 +40,7 @@
+                        } else {
+                                eprintf ("Invalid\n");
+                        }
+-                       break;
++                        aop.size = 1;
+                }
+                showanal (anal, &aop, offset, buf + ret, len - ret, json);
+                if (json && ret + 1 != len) {
+@@ -299,7 +299,7 @@
+                        }
+                        if (aop.size < 1) {
+                                eprintf ("Invalid\n");
+-                               break;
++                               aop.size = 1;
+                        }
+                        ret += aop.size;
+                        r_anal_op_fini (&aop);

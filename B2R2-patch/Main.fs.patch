@@ -1,0 +1,40 @@
+--- src/Utilities/BinDump/Main.fs       2019-02-19 22:50:13.696888453 +0900
++++ src/Utilities/BinDump/Main.fs.patch 2019-02-19 22:47:17.698762664 +0900
+@@ -214,9 +214,10 @@
+
+ let printLowUIRUntil hdl sAddr eAddr =
+   let printFn = function
+-    | Some ins -> BinHandler.LiftInstr hdl ins
+-                  |> LowUIR.Pp.stmtsToString
+-                  |> Console.WriteLine
++    | Some ins -> try BinHandler.LiftInstr hdl ins
++                      |> LowUIR.Pp.stmtsToString
++                      |> Console.WriteLine
++                  with _ -> ()
+     | None -> printIllegal ()
+   parseUntil hdl sAddr eAddr |> List.iter printFn
+
+@@ -227,7 +228,8 @@
+   let digest = pickNext hdl eAddr untilFn (opt >> printLowUIR)
+   let rec loop sAddr =
+     if sAddr >= eAddr then ()
+-    else let r = BinHandler.LiftBBlock hdl sAddr |> digest sAddr
++    else let r = try BinHandler.LiftBBlock hdl sAddr |> digest sAddr
++                 with _ -> Some (sAddr + 1UL)
+          match r with Some n -> loop n | None -> ()
+   loop sAddr
+
+@@ -235,11 +237,11 @@
+   | Ok r -> printIfNotEmpty r
+   | Error r -> printIfNotEmpty r; printIllegal ()
+
+-
+ let [<Literal>] parMaxThres = 64
+
+ let parOptAndPrint hdl =
+-  let lift = BinHandler.LiftInstr hdl
++  let lift x = try BinHandler.LiftInstr hdl x
++               with _ -> [||]
+   let asyncBuilder x =
+     async {
+       return match x with

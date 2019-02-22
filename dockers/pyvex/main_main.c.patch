@@ -1,0 +1,14 @@
+--- ./vex-master/priv/main_main.c.orig  2019-02-19 13:56:55.784711859 +0000
++++ ./vex-master/priv/main_main.c       2019-02-19 13:58:06.195959051 +0000
+@@ -666,9 +666,11 @@
+    vexAllocSanityCheck();
+
+    /* Clean it up, hopefully a lot. */
++   /*
+    irsb = do_iropt_BB ( irsb, specHelper, preciseMemExnsFn, *pxControl,
+                               vta->guest_bytes_addr,
+                               vta->arch_guest );
++   */
+
+    // JRS 2016 Aug 03: Sanity checking is expensive, we already checked
+    // the output of the front end, and iropt never screws up the IR by
