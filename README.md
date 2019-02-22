@@ -1,6 +1,6 @@
 B2R2 Artifact
 -----
-[B2R2](https://github.com/B2R2-org/B2R2) is a collection of useful algorithms,
-functions, and tools for binary analysis, written purely in F#.
-This repository maintains Docker images and binary blobs to run the experiments
-in our paper. 
+
+This is a repository for serving data and Dockerfile we used in our paper "B2R2:
+Building an Efficient Front-End for Binary Analysis". For more information,
+please refer to our paper and our main repository: https://github.com/B2R2-org/B2R2
