@@ -1,4 +1,4 @@
-B2R2 Artifact
+NDSS BAR'19 Artifact
 -----
 
 This is a repository for serving data and Dockerfile we used in our paper "B2R2:
