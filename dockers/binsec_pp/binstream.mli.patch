@@ -1,0 +1,11 @@
+--- src/base/binstream.mli      2018-12-12 10:04:45.065139185 +0000
++++ src/base/binstream.mli.patch        2018-12-12 10:04:16.669461307 +0000
+@@ -59,6 +59,8 @@
+ val append_char : char -> t -> t
+ val prepend_char : char -> t -> t
+
++val pop_front : int -> t -> t
++
+
+ (** {3 Iterators }*)
+

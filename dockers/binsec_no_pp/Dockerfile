@@ -30,5 +30,4 @@ RUN patch -p0 < /root/binsec/binstream.mli.patch
 RUN patch -p0 < /root/binsec/disasm.ml.patch
 RUN eval `opam config env` && make binsec
 
-ADD ./run.sh /run.sh
 WORKDIR /

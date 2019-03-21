@@ -1,0 +1,40 @@
+--- src/disasm/disasm.ml        2018-12-12 10:04:51.713063258 +0000
++++ src/disasm/disasm.ml.patch  2018-12-12 10:04:31.797290145 +0000
+@@ -885,15 +885,30 @@
+   |> Disasm_core.decode_binstream
+   |> fst
+
++let get_bytes_from_file filename =
++  let ch = open_in filename in
++  let buf = Buffer.create 230000000 in
++  (try Buffer.add_channel buf ch 230000000 with _ -> ());
++  close_in ch;
++  Buffer.to_bytes buf
++
++let rec decode_and_print reader =
++  if Binstream.length reader = 0 then ()
++  else
++    let length =
++      try
++        let i = Disasm_core.decode_binstream reader |> fst in
++        Instruction.size i |> Natural.to_int
++      with
++      | X86toDba.InstructionUnhandled s ->
++        1
++    in
++    decode_and_print (Binstream.pop_front length reader)
+
+ let decode raw =
+-  try
+-    let i = inst_of_raw raw in
+-    Logger.result "%a" Instruction.pp i;
+-  with
+-  | X86toDba.InstructionUnhandled s ->
+-    Logger.warning "Not decoded %s" s;
+-    exit 1
++  let fname = Bytes.of_string raw in
++  let reader = get_bytes_from_file fname |> Binstream.of_bytes in
++  decode_and_print reader
+
+ let decode_llvm raw =
+   try
