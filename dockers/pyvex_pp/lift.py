@@ -7,9 +7,19 @@ if sys.argv[1] == 'x86':
 else:
   arch = archinfo.ArchAMD64()
 insns = open(sys.argv[2], 'rb').read()
-offset = 0
 
-while offset < len(insns):
-  irsb = pyvex.lift(insns[offset:], 0, arch, opt_level=-1)
-  irsb.pp()
-  offset += irsb.size
+def transIR(data, arch) :
+  dataLen = len(data)
+  sPos = 0
+  while sPos < dataLen :
+    ePos = sPos + 20
+    if ePos > dataLen : ePos = dataLen
+    sData = data[sPos:ePos]
+    irsb = pyvex.lift(sData, sPos, arch, opt_level=-1)
+    irsb.pp()
+    if irsb.size == 0:
+      sPos += 1
+    else:
+      sPos = irsb.size + sPos
+
+transIR(insns, arch)
