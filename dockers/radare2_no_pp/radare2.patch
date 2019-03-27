@@ -1,0 +1,25 @@
+--- ./binr/rasm2/rasm2.c  2018-12-12 13:57:31.617191197 +0000
++++ ./binr/rasm2/rasm2.c.patched  2018-12-12 13:57:24.801298316 +0000
+@@ -40,7 +40,7 @@ static int show_analinfo(const char *arg, ut64 offset) {
+ 			} else {
+ 				eprintf ("Invalid\n");
+ 			}
+-			break;
++                        aop.size = 1;
+ 		}
+ 		showanal (anal, &aop, offset, buf + ret, len - ret, json);
+ 		if (json && ret + 1 != len) {
+@@ -295,11 +295,11 @@ static int rasm_disasm(char *buf, ut64 offset, int len, int bits, int ascii, int
+ 		while (ret < len) {
+ 			aop.size = 0;
+ 			if (r_anal_op (anal, &aop, offset, data + ret, len - ret, R_ANAL_OP_MASK_ESIL) > 0) {
+-				printf ("%s\n", R_STRBUF_SAFEGET (&aop.esil));
++				//printf ("%s\n", R_STRBUF_SAFEGET (&aop.esil));
+ 			}
+ 			if (aop.size < 1) {
+ 				eprintf ("Invalid\n");
+-				break;
++                               aop.size = 1;
+ 			}
+ 			ret += aop.size;
+ 			r_anal_op_fini (&aop);
