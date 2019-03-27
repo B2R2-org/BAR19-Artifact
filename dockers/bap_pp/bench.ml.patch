@@ -1,0 +1,12 @@
+--- lifting-benchmark/bench.ml
++++ lifting-benchmark/bench.ml.patch
+@@ -54,7 +54,8 @@ let disasm arch mem =
+         ~hit:(fun s mem insn () ->
+             Stats.update Stats.code (Memory.length mem);
+             match Target.lift mem insn with
+-            | Ok _ ->
++            | Ok bil ->
++              Format.printf "%a@\n" Bil.pp bil;
+               incr Stats.insns;
+               Dis.step s ();
+             | Error _ ->
